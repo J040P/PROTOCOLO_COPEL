@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, Animated, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Animated } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Data } from './db';
-import Header from '../Header';
+import { Data } from '@/src/components/Pde/db';
 
 type Props = {
   id: number;
@@ -11,21 +10,16 @@ type Props = {
   status: string;
 };
 
-export default function Pde() {
+export default function Pde_flz() {
   const [expandedItems, setExpandedItems] = useState<{ [key: number]: boolean }>({});
   const [rotateAnimations] = useState<{ [key: number]: Animated.Value }>({});
   const [filteredData, setFilteredData] = useState<Props[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    // Filtra os dados quando o componente é montado ou quando o termo de pesquisa muda
-    const filterData = Data.filter(item =>
-      item.status === 'Iniciar' &&
-      (item.code.toLowerCase().includes(searchTerm.toLowerCase()) || 
-       item.dress.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
+    // Filtra os dados quando o componente é montado
+    const filterData = Data.filter(item => item.status === 'Pausado');
     setFilteredData(filterData);
-  }, [searchTerm]);
+  }, []);
 
   const toggleExpand = (id: number) => {
     const isExpanded = expandedItems[id];
@@ -34,10 +28,12 @@ export default function Pde() {
       [id]: !prevState[id],
     }));
 
+    // Inicializa a animação se não estiver definida
     if (!rotateAnimations[id]) {
       rotateAnimations[id] = new Animated.Value(0);
     }
 
+    // Animação para rotacionar o ícone
     Animated.timing(rotateAnimations[id], {
       toValue: isExpanded ? 0 : 1,
       duration: 300,
@@ -56,7 +52,7 @@ export default function Pde() {
         <View className="w-10/12 bg-gray-200 flex-row h-16 items-center justify-between p-4 rounded-xl mx-auto">
           <TouchableOpacity className='w-full bg-gray-200 flex-row h-16 items-center justify-between rounded-xl' onPress={() => toggleExpand(item.id)}>
             <View className="flex-row items-center gap-2">
-              <Text className="text-black font-semibold text-xl">{item.code}</Text>
+              <Text className="color-cyan-700 font-semibold text-xl">{item.code}</Text>
               <View className="h-1 w-1 border-2 rounded-full" />
               <Text className="text-gray-700">{item.dress}</Text>
             </View>
@@ -76,14 +72,12 @@ export default function Pde() {
   };
 
   return (
-    <View className="flex-1">
-      <FlatList
-        className="w-full"
-        data={filteredData}
-        keyExtractor={item => item.id.toString()}
-        renderItem={renderItem}
-        showsVerticalScrollIndicator={false}
-      />
-    </View>
+    <FlatList
+      className="w-full"
+      data={filteredData}
+      keyExtractor={item => item.id.toString()}
+      renderItem={renderItem}
+      showsVerticalScrollIndicator={false}
+    />
   );
 }

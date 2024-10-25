@@ -3,15 +3,18 @@ import Constants from 'expo-constants';
 import Title from "../components/Title";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import Pde from "../components/Pde";  // Certifique-se de que isso é o componente correto
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Pde_Psd from "../components_Psd/Pde";
+import Footer_psd from "../components_Psd/Footer";
+import Pde_flz from "../components_Flz/Pde";
+import Footer_flz from "../components_Flz/Footer";
 
 
 const Tab = createBottomTabNavigator();
 
 const statusBarHeight = Constants.statusBarHeight;
 
-export default function Home() {
+export default function Filanizado() {
 
   return (  
     <View className="w-full h-full items-center gap-5 bg-gray-100">
@@ -22,10 +25,10 @@ export default function Home() {
         <Title />
       </View>
       <View className="w-full items-center h-3/5">
-        <Pde />
+        <Pde_flz/>
       </View>
       <View className="relative w-full items-center justify-center">
-        <Footer />
+        <Footer_flz/>
       </View>
     </View>
   );
